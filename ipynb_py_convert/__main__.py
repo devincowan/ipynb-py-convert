@@ -2,7 +2,7 @@ import json
 import sys
 from os import path
 
-header_comment = '# %%\n'
+header_comment = '# %%'
 
 
 def nb2py(notebook):
@@ -28,7 +28,7 @@ def py2nb(py_str):
         py_str = py_str[len(header_comment):]
 
     cells = []
-    chunks = py_str.split('\n\n%s' % header_comment)
+    chunks = py_str.split(header_comment)
 
     for chunk in chunks:
         cell_type = 'code'
@@ -38,6 +38,25 @@ def py2nb(py_str):
         elif chunk.startswith('"""'):
             chunk = chunk.strip('"\n')
             cell_type = 'markdown'
+        elif chunk.count('markdown')>0:
+            chunk = chunk.strip()
+            chunk = chunk.replace('markdown','')
+            chunk = chunk.strip('#')
+            chunk = chunk.strip('"\n')
+            cell_type = 'markdown'
+        elif chunk.partition('\n')[0].count('md')>0:
+            chunk = chunk.strip()
+            chunk = chunk.replace('md','')
+            chunk = chunk.strip('#')
+            chunk = chunk.strip('"\n')
+            cell_type = 'markdown'
+        elif chunk.partition('\n')[0].count('codecell')>0:
+            # print("count md")
+            # chunk = chunk[chunk.find('markdown'):]
+            chunk = chunk.strip()
+            chunk = chunk.replace('codecell','')
+            chunk = chunk.strip('"\n')
+            cell_type = 'code'
 
         cell = {
             'cell_type': cell_type,
