@@ -1,6 +1,7 @@
 import json
 import sys
 from os import path
+import re
 
 header_comment = '# %%'
 
@@ -41,23 +42,21 @@ def py2nb(py_str):
         elif chunk.count('markdown')>0:
             chunk = chunk.strip()
             chunk = chunk.replace('markdown','')
-            chunk = chunk.strip('#')
+            chunk = re.sub("(?m)^#\s","", chunk)
+            chunk.replace("\n# ",'')
             chunk = chunk.strip('"\n')
             cell_type = 'markdown'
         elif chunk.partition('\n')[0].count('md')>0:
             chunk = chunk.strip()
             chunk = chunk.replace('md','')
-            chunk = chunk.strip('#')
+            chunk = re.sub("(?m)^#\s","", chunk)
             chunk = chunk.strip('"\n')
             cell_type = 'markdown'
         elif chunk.partition('\n')[0].count('codecell')>0:
-            # print("count md")
-            # chunk = chunk[chunk.find('markdown'):]
             chunk = chunk.strip()
             chunk = chunk.replace('codecell','')
             chunk = chunk.strip('"\n')
             cell_type = 'code'
-
         cell = {
             'cell_type': cell_type,
             'metadata': {},
