@@ -44,18 +44,18 @@ def py2nb(py_str):
             chunk = chunk.replace('markdown','')
             chunk = re.sub("(?m)^#\s","", chunk)
             chunk.replace("\n# ",'')
-            chunk = chunk.strip('"\n')
+            chunk = chunk.strip('\n')
             cell_type = 'markdown'
         elif chunk.partition('\n')[0].count('md')>0:
             chunk = chunk.strip()
             chunk = chunk.replace('md','')
             chunk = re.sub("(?m)^#\s","", chunk)
-            chunk = chunk.strip('"\n')
+            chunk = chunk.strip('\n')
             cell_type = 'markdown'
         elif chunk.partition('\n')[0].count('codecell')>0:
             chunk = chunk.strip()
             chunk = chunk.replace('codecell','')
-            chunk = chunk.strip('"\n')
+            chunk = chunk.strip('\n')
             cell_type = 'code'
         cell = {
             'cell_type': cell_type,
