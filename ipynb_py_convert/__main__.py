@@ -39,6 +39,13 @@ def py2nb(py_str):
         elif chunk.startswith('"""'):
             chunk = chunk.strip('"\n')
             cell_type = 'markdown'
+        elif chunk.count('[markdown]')>0:
+            chunk = chunk.strip()
+            chunk = chunk.replace('[markdown]','')
+            chunk = re.sub("(?m)^#\s","", chunk)
+            chunk.replace("\n# ",'')
+            chunk = chunk.strip('\n')
+            cell_type = 'markdown'
         elif chunk.count('markdown')>0:
             chunk = chunk.strip()
             chunk = chunk.replace('markdown','')
